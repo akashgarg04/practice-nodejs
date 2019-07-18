@@ -1,0 +1,7 @@
+{
+    "name": "Application - Production",
+    "mail": {
+        "host": "http://prod-mail.com/mail-prod",
+        "username":"Prod-mail-user"
+    }
+}

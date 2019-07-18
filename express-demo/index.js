@@ -4,7 +4,8 @@ const logger = require('./logger');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const config = require('config');
-
+const debugapp = require ('debug')('app:app');
+const debugapi = require ('debug')('app:api');
 
 const app = express();
 
@@ -21,21 +22,24 @@ app.use(express.static('public'));
 // Middleware function for logging
 app.use(logger);
 app.use(helmet());
-app.use(morgan('tiny'));
+
+// Enable if its not production
+if (app.get('env') != 'production')
+{
+    app.use(morgan('tiny'));
+    debugapp('Morgan is here!!!')
+}
 
 // Middleware function for authentication
 app.use( (req, res, next) => {
-    console.log('Performing Authentication...');
+    debugapi('Performing Authentication...');
     //perform authentication
     if (1) // check is authentication is successful
     {
-        console.log('Successfully Authenticated! Welcome!!');
+        debugapp('Successfully Authenticated! Welcome!!');
         next();
     }
 });
-
-console.log(`Env Variable 1 is : ${process.env.NODE_ENV}`);
-console.log(`Env Variable 2 is : ${app.get('env')}`);  /// Gets the same result like above but used 'development' as default
 
 const courses = [
         {id: 1, name: 'course1' },
@@ -127,6 +131,17 @@ app.delete('/api/course/:id', (req, res) => {
     }
     res.send(course);
 });
+
+// Fetch Config
+console.log(`Env Variable 1 is : ${process.env.NODE_ENV}`);
+console.log(`Env Variable 2 is : ${app.get('env')}`);  /// Gets the same result like above but used 'development' as default
+
+console.log(`The name of the Application is : ${config.get('name')}`);
+console.log(`The name of the mail server host is : ${config.get('mail.host')}`);
+console.log(`The name of the email user is : ${config.get('mail.username')}`);
+
+console.log(`The password is : ${config.get('mail.password')}`);
+
 
 
 const PORT = process.env.NODE_PORT || 3000

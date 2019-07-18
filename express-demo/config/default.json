@@ -1,0 +1,7 @@
+{
+    "name": "Application",
+    "mail": {
+        "host": "http://abc-mail-zyx.com/default-mail",
+        "username":"default"
+    }
+}
