@@ -1,8 +1,8 @@
 const Joi = require ('joi');
 const express = require('express');
-const app = express();
+const router = express.Router();
 
-app.use(express.json());
+router.use(express.json());
 
 const genres = [
         {id: 1, name: 'action' },
@@ -13,21 +13,18 @@ const genres = [
         {id: 6, name: 'thriller' },
 ];
 
-app.get('/',(req, res) => {
-    res.send('Welcome to VIDLY!!');
-});
 
-app.get('/api/genres',(req, res) => {
+router.get('/',(req, res) => {
     res.send(genres);
 });
 
-app.get('/api/genre/:id',(req, res) => {
+router.get('/:id',(req, res) => {
     const genres = genres.find( c => c.id == parseInt(req.params.id))
     if (!genre) {return res.status(404).send('genre not found')}
     else { res.send(genre); }
 });
 
-app.post('/api/genres',(req, res) => {
+router.post('/',(req, res) => {
     const {error} = validategenre(req.body);
     if (error){
         res.status(400).send(error.details[0].message)
@@ -42,7 +39,7 @@ app.post('/api/genres',(req, res) => {
     res.send(genres);
 });
 
-app.put('/api/genre/:id',(req, res) => {
+router.put('/:id',(req, res) => {
     var genre = genres.find( c => c.id == parseInt(req.params.id))
     if (!genre) {return res.status(404).send('genre not found to update')}
 
@@ -57,7 +54,7 @@ app.put('/api/genre/:id',(req, res) => {
     res.send(genres);
 });
 
-app.delete('/api/genre/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const genre = genres.find(c => (c.id == parseInt(req.params.id)))
     if (!genre) { return res.status(404).send('genre cannot be deleted as it does not exists.')    }
     else {
@@ -68,15 +65,11 @@ app.delete('/api/genre/:id', (req, res) => {
 });
 
 
-const PORT = process.env.NODE_PORT || 3000
-app.listen(PORT, () => {
-    console.log(`listening on port ${PORT}`);
-});
-
-
 function validategenre(text) {
     const schema = {
         name: Joi.string().min(3).required()
     };
     return (Joi.validate(text,schema));
 }
+
+module.exports = router;
