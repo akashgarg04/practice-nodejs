@@ -8,7 +8,7 @@ mongoose.connect('mongodb://localhost/mongo-exercises')
 const courseSchema = new mongoose.Schema({
     tags: [String],
     date: {type: Date, default: Date.now},
-    name: String,
+    name: { type: String, required: true},
     author: String,
     isPublished: Boolean,
     price: Number
@@ -38,7 +38,6 @@ async function getAllBackendCourses() {
 
 async function getAllCourses () {
     return await Course
-//        .find({ isPublished: true, tags: { $in : ['frontend','backend'] }})
         .find({ isPublished: true })
         .or([ {tags: 'frontend'} ,{ tags: 'backend'} ])
         .sort('-price')
@@ -47,8 +46,5 @@ async function getAllCourses () {
 async function getCoursesAbove15 () {
     return await Course
         .find( { isPublished: true } )
-        // .and ([ { isPublished: true },
-        //         { price: {$gte: 15 } } 
-        //       ])
         .or([ { price: {$gte: 15 }} , {name: /.*by.*/i } ]);
 }

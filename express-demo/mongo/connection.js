@@ -5,29 +5,64 @@ mongoose.connect('mongodb://localhost/playground')
     .catch(()=> console.error('Error connecting MongoDB database!!', err));
 
 const courseSchema = new mongoose.Schema({
-    name: String,
+    // Adding validation for name as required. 
+    // -----NOTE THIS VALIDATION IS JUST IN MONGOOSE, MONGODB DOES NOT CARE
+    name: { type: String, 
+            required: true,
+            minlength: 5,
+            maxlength:100
+            // , match: /pattern/
+        },
+    level: {
+        type: String,
+        required: true,
+        enum : ['beginner','intermidate','expert']
+    },
     author: String,
     date: {type: Date, default: Date.now},
-    tags: [ String ],
-    isPublished: Boolean
+    // Custom Validation
+    tags: {
+            type: Array,
+            validate: {
+                validator: function (v) {
+                    return (v && v.length > 0);
+                },
+                message: 'Atleast one tag is required.'
+            }
+          },
+    isPublished: Boolean,
+    price: {   
+            type: Number,
+            min:8, max: 20,
+            // Following validation makes price required if published is true
+            // FUNCTION CANNOT BE REPLACED BY => AS THIS WILL LOOSE THE CONTEXT
+            required: function () { return this.isPublished }}
 });
 
 const Course = mongoose.model('Course', courseSchema);
 
-//createCourse();
+createCourse();
 //getCourse();
 //updateCourse('5d363f74c0e2151fd3eaf760');
-deleteCourse('5d363f74c0e2151fd3eaf760');
+//deleteCourse('5d363f74c0e2151fd3eaf760');
 
 async function createCourse() {
-    const course = new Course({
-        name: 'Become Angular Expert',
-        author: 'not so smart guy',
-        tags: ['node', 'waaho'],
-        isPublished: true
-    });
-    const result = await course.save();
-    console.log(result);
+    try{
+        const course = new Course({
+            name: 'Become Angular Expert',
+            author: 'not so smart guy',
+            level: 'beginner',
+            tags: [],   //'frontend', 'angular'
+            isPublished: true,
+            price: 12
+        });
+        const result = await course.save();
+        console.log(result);
+    }
+    catch(err)
+    {
+        console.error('Error happened', err.message);
+    }
 }
 
 async function getCourse()
