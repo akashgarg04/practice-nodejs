@@ -16,15 +16,29 @@ const courseSchema = new mongoose.Schema({
     level: {
         type: String,
         required: true,
-        enum : ['beginner','intermidate','expert']
+        enum : ['beginner','intermidate','expert'],
+        lowercase: true,
+        trim: true
     },
     author: String,
     date: {type: Date, default: Date.now},
     // Custom Validation
     tags: {
             type: Array,
+            // //////// Async validation
+            // validate: {
+            //     isAsync: true,
+            //     validator: function (v , callback) {
+            //         setTimeout(() => {
+            //             // Some API Call
+            //             callback (v && v.length > 0);
+            //         }, 4000);
+            //     },
+            //     message: 'Atleast one tag is required.'
+            // }
+            ////// Sync validation
             validate: {
-                validator: function (v) {
+                validator: function (v) {   // This could be a async call using callback
                     return (v && v.length > 0);
                 },
                 message: 'Atleast one tag is required.'
@@ -34,6 +48,8 @@ const courseSchema = new mongoose.Schema({
     price: {   
             type: Number,
             min:8, max: 20,
+            get: v => Math.round(v),
+            set: v => Math.round(v),
             // Following validation makes price required if published is true
             // FUNCTION CANNOT BE REPLACED BY => AS THIS WILL LOOSE THE CONTEXT
             required: function () { return this.isPublished }}
@@ -51,17 +67,19 @@ async function createCourse() {
         const course = new Course({
             name: 'Become Angular Expert',
             author: 'not so smart guy',
-            level: 'beginner',
-            tags: [],   //'frontend', 'angular'
+            level: '1',
+            tags: ['frontend', 'angular'],
             isPublished: true,
             price: 12
         });
         const result = await course.save();
         console.log(result);
     }
-    catch(err)
+    catch(ex)
     {
-        console.error('Error happened', err.message);
+        //console.error('Error happened', err.message);
+        for (field in ex.errors)
+            console.log(ex.errors[field].message);
     }
 }
 
