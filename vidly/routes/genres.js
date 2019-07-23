@@ -19,8 +19,8 @@ router.get('/',(req, res) => {
 });
 
 router.get('/:id',(req, res) => {
-    const genres = genres.find( c => c.id == parseInt(req.params.id))
-    if (!genre) {return res.status(404).send('genre not found')}
+    const genres = genres.find( c => c.id == parseInt(req.params.id));
+    if (!genre) {return res.status(404).send('genre not found'); }
     else { res.send(genre); }
 });
 
@@ -34,18 +34,18 @@ router.post('/',(req, res) => {
     const genre = {
         id: genres.length+1,
         name: req.body.name
-    }
+    };
     genres.push(genre);
     res.send(genres);
 });
 
 router.put('/:id',(req, res) => {
-    var genre = genres.find( c => c.id == parseInt(req.params.id))
-    if (!genre) {return res.status(404).send('genre not found to update')}
+    var genre = genres.find( c => c.id == parseInt(req.params.id));
+    if (!genre) {return res.status(404).send('genre not found to update'); }
 
     const {error} = validategenre(req.body); // {error} = result.error
     if (error){
-        res.status(400).send(error.details[0].message)
+        res.status(400).send(error.details[0].message);
         return;
     }
 
@@ -55,8 +55,8 @@ router.put('/:id',(req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
-    const genre = genres.find(c => (c.id == parseInt(req.params.id)))
-    if (!genre) { return res.status(404).send('genre cannot be deleted as it does not exists.')    }
+    const genre = genres.find(c => (c.id == parseInt(req.params.id)));
+    if (!genre) { return res.status(404).send('genre cannot be deleted as it does not exists.'); }
     else {
         const index = genres.indexOf(genre);
         genres.splice(index,1);
