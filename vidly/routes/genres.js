@@ -1,3 +1,5 @@
+//////////// This file is depricated, use genresDb instead
+
 const Joi = require ('joi');
 const express = require('express');
 const router = express.Router();

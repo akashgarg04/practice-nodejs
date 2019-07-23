@@ -1,6 +1,7 @@
 const express = require('express');
-const genres = require('./routes/genresDb');
 const mongoose = require('mongoose');
+const genres = require('./routes/genresDb');
+const customer = require('./routes/customer');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get('/',(req, res) => {
 });
 
 app.use('/api/genres',genres);
+app.use('/api/customer',customer);
 
 
 const PORT = process.env.NODE_PORT || 3000
