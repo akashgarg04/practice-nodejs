@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const genres = require('./routes/genresDb');
 const customer = require('./routes/customer');
+const movie = require('./routes/movie');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get('/',(req, res) => {
 
 app.use('/api/genres',genres);
 app.use('/api/customer',customer);
+app.use('/api/movie',movie);
 
 
 const PORT = process.env.NODE_PORT || 3000

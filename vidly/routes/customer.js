@@ -35,12 +35,12 @@ router.post('/', async (req, res) => {
             isGold: req.body.isgold
         });
         await customer.save();
+        res.send(customer);
     }
     catch(ex) { 
         console.log ('Something went wrong!', ex.message); 
         return;
     }
-    res.send(customer);
 });
 
 
