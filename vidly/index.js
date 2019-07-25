@@ -1,3 +1,4 @@
+const config = require ('config');
 const express = require('express');
 const mongoose = require('mongoose');
 const Joi = require ('joi');
@@ -7,6 +8,13 @@ const genres = require('./routes/genresDb');
 const customer = require('./routes/customer');
 const movie = require('./routes/movie');
 const rental = require('./routes/rental');
+const user = require('./routes/user');
+const auth = require('./routes/auth');
+
+if (!config.get('jwtPrivateKey')) {
+    console.error('FATAL ERROR: vidly_jwtPrivateKey not defined');
+    process.exit(1);
+}
 
 const app = express();
 
@@ -24,6 +32,8 @@ app.use('/api/genres',genres);
 app.use('/api/customer',customer);
 app.use('/api/movie',movie);
 app.use('/api/rental',rental);
+app.use('/api/user',user);
+app.use('/api/auth',auth);
 
 
 const PORT = process.env.NODE_PORT || 3000
