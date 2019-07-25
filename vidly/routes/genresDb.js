@@ -1,4 +1,6 @@
 const express = require('express');
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const { Genres, validate } = require('../models/genres');
 
 const router = express.Router();
@@ -22,7 +24,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth , async (req, res) => {
     const {error} = validate(req.body);
     if (error){
         res.status(400).send(error.details[0].message)
@@ -65,7 +67,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin] , async (req, res) => {
     try{
         const genre = await Genres.findByIdAndRemove(
                 req.params.id , 
