@@ -1,16 +1,34 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const asyncMiddleware = require('../middleware/async');
 const { Genres, validate } = require('../models/genres');
 
 const router = express.Router();
 router.use(express.json());
 
+///////// Implimented via asyncMiddleware
+router.get('/', asyncMiddleware ( async (req, res) => {
+    try {
+        const genres = await Genres.find();
+        res.send(genres);
+    }
+    catch (ex){
+        next (ex);
+    }
+})) ;
 
-router.get('/', async (req, res) => {
-    const genres = await Genres.find();
-    res.send(genres);
-});
+////// re-implimented using 'express-async-errors', removing the asyncMiddleware call
+// router.get('/', async (req, res) => {
+//     try {
+//         const genres = await Genres.find();
+//         res.send(genres);
+//     }
+//     catch (ex){
+//         next (ex);
+//     }
+// });
+
 
 router.get('/:id', async (req, res) => {
     try {
