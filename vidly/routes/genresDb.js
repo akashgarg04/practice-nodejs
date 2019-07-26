@@ -8,18 +8,7 @@ const router = express.Router();
 router.use(express.json());
 
 ///////// Implimented via asyncMiddleware
-router.get('/', asyncMiddleware ( async (req, res) => {
-    try {
-        const genres = await Genres.find();
-        res.send(genres);
-    }
-    catch (ex){
-        next (ex);
-    }
-})) ;
-
-////// re-implimented using 'express-async-errors', removing the asyncMiddleware call
-// router.get('/', async (req, res) => {
+// router.get('/', asyncMiddleware ( async (req, res) => {
 //     try {
 //         const genres = await Genres.find();
 //         res.send(genres);
@@ -27,7 +16,13 @@ router.get('/', asyncMiddleware ( async (req, res) => {
 //     catch (ex){
 //         next (ex);
 //     }
-// });
+// })) ;
+
+////// re-implimented using 'express-async-errors', removing the asyncMiddleware call
+router.get('/', async (req, res) => {
+    const genres = await Genres.find();
+    res.send(genres);
+});
 
 
 router.get('/:id', async (req, res) => {
