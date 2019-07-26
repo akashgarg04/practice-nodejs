@@ -41,7 +41,7 @@ function validateUser(text) {
         name: Joi.string().min(3).max(10).required(),
         email: Joi.string().min(5).max(50).required().email(),
         password: Joi.string().min(3).required(),
-        isAdmin: Joi.Boolean()
+        isAdmin: Joi.boolean()
     };
     return (Joi.validate(text,schema));
 }
