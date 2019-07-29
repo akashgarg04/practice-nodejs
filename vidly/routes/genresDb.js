@@ -1,4 +1,5 @@
 const express = require('express');
+const validateObjectId = require('../middleware/validateObjectId');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const asyncMiddleware = require('../middleware/async');
@@ -25,7 +26,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
     try {
         console.log(req.params.id);
         const genre = await Genres.findByIdAndRemove(req.params.id);
