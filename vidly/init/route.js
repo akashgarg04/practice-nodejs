@@ -2,6 +2,7 @@ const genres = require('../routes/genresDb');
 const customer = require('../routes/customer');
 const movie = require('../routes/movie');
 const rental = require('../routes/rental');
+const returns = require('../routes/returns');
 const user = require('../routes/user');
 const auth = require('../routes/auth');
 const error = require('../middleware/error');
@@ -19,6 +20,7 @@ module.exports = function (app)
     app.use('/api/rental',rental);
     app.use('/api/user',user);
     app.use('/api/auth',auth);
+    app.use('/api/returns',returns);
 
     //Catch all exceptions
     app.use( error );
