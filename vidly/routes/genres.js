@@ -74,4 +74,4 @@ function validategenre(text) {
     return (Joi.validate(text,schema));
 }
 
-module.exports = router;
+//module.exports = router;

@@ -3,11 +3,11 @@ const {Genres} = require('../../models/genres');
 
 describe ('/api/genres', () => {
 
-    let server;
+    let app;
 
-    beforeEach( () => { server = require ('../../index'); } );
+    beforeEach( () => { app = require ('../../index'); } );
     afterEach( async () =>  {
-        await server.close();
+        //await server.close();
         await Genres.remove({});
      });
 
@@ -19,7 +19,7 @@ describe ('/api/genres', () => {
         ]);
 
         it ('should return all genres' , async () => {
-             const res = await request(server).get('/api/genres');
+             const res = await request.agent(app).get('/api/genres');
              expect(res.status).toBe(200);
              expect(res.body.length).toBe(3);
              expect(res.body.some(data => data.name == 'genres')).toBeTruthy();

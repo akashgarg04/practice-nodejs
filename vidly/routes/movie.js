@@ -13,8 +13,8 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        const movie = await Movie.findByIdAndRemove(req.params.id);
-        res.send(movie);
+        res.send(await Movie.findById(req.params.id));
+        // res.send(movie);
     }
     catch (ex) {
         return res.status(404).send('movie not found');

@@ -1,28 +1,27 @@
-
+const mongoose = require('mongoose');
 const request = require('supertest');
 const moment = require('moment');
 const {Rental} = require('../../models/rental');
 const {Movie} = require('../../models/movies');
 const {User} = require('../../models/user');
-const mongoose = require('mongoose');
 
 describe ('/api/returns' , () => {
-    let server; 
     let customerId; 
     let movieId;
     let rental;
     let movie; 
     let token;
+    let appf
 
     const exec = () => {
-        return request(server)
+        return (request.agent(app))
             .post('/api/returns')
             .set('x-auth-token', token)
             .send({ customerId, movieId });
     };
 
     beforeEach(async () => { 
-        server = require('../../index'); 
+        app = require('../../index'); 
         customerId = mongoose.Types.ObjectId();
         movieId = mongoose.Types.ObjectId();
         token = new User().generateAuthToken();
@@ -55,7 +54,7 @@ describe ('/api/returns' , () => {
     });
 
     afterEach(async () => { 
-        await server.close(); 
+        //await server.close(); 
         await Rental.remove({});
         await Movie.remove({});
     });  
@@ -129,10 +128,6 @@ describe ('/api/returns' , () => {
         expect(res.body).toHaveProperty('amount');
         expect(res.body).toHaveProperty('customer');
         expect(res.body).toHaveProperty('movie');
-
-        // expect(Object.keys(res.body)).toEqual(
-        //     expect.arrayContaining(['dateOut', 'dateReturned', 'rentalFee',
-        //     'customer', 'movie']));
     });
 });
 
